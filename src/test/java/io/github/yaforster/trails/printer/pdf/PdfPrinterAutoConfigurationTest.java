@@ -8,6 +8,8 @@ import io.github.yaforster.trails.core.print.TestPathPrintContext;
 import io.github.yaforster.trails.core.test.Browser;
 import io.github.yaforster.trails.sdk.composition.AdapterId;
 import io.github.yaforster.trails.sdk.composition.TrailsBrowserRegistration;
+import io.github.yaforster.trails.sdk.composition.TrailsComposition;
+import io.github.yaforster.trails.sdk.composition.TrailsPrintingRegistration;
 import io.github.yaforster.trails.sdk.composition.TrailsPersistenceRegistration;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -27,11 +29,24 @@ import static org.mockito.Mockito.verifyNoInteractions;
 class PdfPrinterAutoConfigurationTest {
 
     @Test
+    void shouldRejectAnotherPrintingRegistration_evenWhenItIsPrimary() {
+        new ApplicationContextRunner().withUserConfiguration(Wrapper.class)
+                                      .withBean("customerPrinter", TrailsPrintingRegistration.class,
+                                              () -> new TrailsPrintingRegistration(new AdapterId("customer-printer"),
+                                                      mock()),
+                                              definition -> definition.setPrimary(true))
+                                      .run(context -> assertThat(context.getStartupFailure()).hasRootCauseMessage(
+                                              "Invalid Trails composition: exactly one printing registration is required, found 2"));
+    }
+
+    @Test
     void shouldDiscoverPrinterAndRender_whenWrapperHasNoPrintingConfiguration() {
         new ApplicationContextRunner().withUserConfiguration(Wrapper.class)
                                       .run(context -> {
                                           ByteArrayOutputStream output = new ByteArrayOutputStream();
-                                          context.getBean(PrintService.class)
+                                          context.getBean(TrailsComposition.class)
+                                                 .printing()
+                                                 .printService()
                                                  .renderTestPathPdf(new PrintService.TestPathPdf(
                                                          new TestPathPrintContext(1L, 2L, "Automatically configured",
                                                                  Browser.CHROME, List.of()),
@@ -51,7 +66,9 @@ class PdfPrinterAutoConfigurationTest {
                                       .withPropertyValues("spring.thymeleaf.prefix=classpath:/missing/",
                                               "spring.thymeleaf.enabled=false")
                                       .run(context -> {
-                                          context.getBean(PrintService.class)
+                                          context.getBean(TrailsComposition.class)
+                                                 .printing()
+                                                 .printService()
                                                  .renderTestPathPdf(
                                                          new PrintService.TestPathPdf(
                                                                  new TestPathPrintContext(1L, 2L, "Isolated",

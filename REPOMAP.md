@@ -12,7 +12,7 @@ trails-printer-pdf/
 |   |-- ReportScreenshotLoader.java        Loads and encodes screenshots by persisted action-result ID
 |   |-- RenderConfiguration.java           Immutable rendering inputs and documented screenshot lookup
 |   |-- PdfReportRenderer.java             Template binding, HTML rendering, and PDF output
-|   `-- PdfPrinterAutoConfiguration.java    PrintService registration and isolated template engine
+|   `-- PdfPrinterAutoConfiguration.java    Printing registration, persistence port registration, Thymeleaf
 |-- src/main/resources/
 |   |-- META-INF/spring/                    Boot auto-configuration discovery
 |   `-- templates/trails-printer-pdf/       Three report templates and shared fragments

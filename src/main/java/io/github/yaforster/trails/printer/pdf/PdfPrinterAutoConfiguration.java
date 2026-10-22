@@ -1,8 +1,9 @@
 package io.github.yaforster.trails.printer.pdf;
 
-import io.github.yaforster.trails.app.services.PrintService;
 import io.github.yaforster.trails.app.services.ActionResultScreenshotQueryService;
-import io.github.yaforster.trails.sdk.composition.TrailsComposition;
+import io.github.yaforster.trails.sdk.composition.AdapterId;
+import io.github.yaforster.trails.sdk.composition.TrailsPersistenceRegistration;
+import io.github.yaforster.trails.sdk.composition.TrailsPrintingRegistration;
 import java.nio.charset.StandardCharsets;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +18,12 @@ public class PdfPrinterAutoConfiguration {
     private static final String REPORT_TEMPLATE_DIRECTORY = "templates/trails-printer-pdf/";
 
     @Bean
-    PrintService trailsPdfPrinter(TrailsComposition composition) {
+    TrailsPrintingRegistration trailsPdfPrinter(TrailsPersistenceRegistration persistence) {
         SpringTemplateEngine reportTemplates = createReportTemplateEngine();
-        ActionResultScreenshotQueryService screenshotQuery = composition.persistence()
-                                                                        .ports()
+        ActionResultScreenshotQueryService screenshotQuery = persistence.ports()
                                                                         .actionResultScreenshotQueryService();
-        return new PdfPrintService(reportTemplates, screenshotQuery);
+        return new TrailsPrintingRegistration(new AdapterId("pdf"),
+                new PdfPrintService(reportTemplates, screenshotQuery));
     }
 
     static SpringTemplateEngine createReportTemplateEngine() {
