@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="printCommonStyles">
+        <style>
+            @page {
+                size: A4;
+                margin: 2mm;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                background: #f6f6f6;
+                color: #222222;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 13px;
+                line-height: 1.25;
+                margin: 0;
+                padding: 8px;
+            }
+
+            .report {
+                margin: 0 auto;
+                max-width: 920px;
+            }
+
+            .header,
+            .path-section {
+                background: #ffffff;
+                border: 1px solid #999999;
+                border-radius: 4px;
+            }
+
+            .header {
+                margin-bottom: 10px;
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 18px;
+                margin: 0 0 6px 0;
+            }
+
+            .header-meta {
+                display: block;
+            }
+
+            .path-section h2 {
+                font-size: 16px;
+            }
+
+            .header-meta-item {
+                background: #fefefe;
+                border: 1px solid #dddddd;
+                border-radius: 4px;
+                padding: 6px 7px;
+            }
+
+            .header-meta-label,
+            .action-field-label {
+                color: #555555;
+                font-size: 11px;
+            }
+
+            .header-meta-label {
+                display: block;
+                margin-bottom: 1px;
+            }
+
+            .header-meta-value {
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            .action-grid {
+                display: block;
+            }
+
+            .action-field {
+                background: #ffffff;
+                border: 1px solid #dddddd;
+                border-radius: 4px;
+                min-height: 40px;
+                padding: 5px 7px 3px;
+            }
+
+            .action-field-label {
+                display: block;
+                margin-bottom: 1px;
+            }
+
+            .action-field-value {
+                font-size: 13px;
+                font-weight: 700;
+                word-wrap: break-word;
+                white-space: pre-wrap;
+            }
+
+            .action-screenshot-wrap {
+                background: transparent;
+                display: block;
+                text-align: center;
+                margin-top: 8px;
+                padding: 6px;
+            }
+
+            .action-screenshot {
+                display: block;
+                height: auto;
+                margin: 0;
+                max-width: 100%;
+                max-height: 300px;
+                width: auto;
+            }
+
+            .result-success {
+                background: #5ab55a;
+            }
+
+            .result-skipped {
+                background: #959595;
+            }
+
+            .result-failure {
+                background: #d13535;
+            }
+
+            .action-card {
+                border: 1px solid #999999;
+                border-radius: 4px;
+            }
+
+            .print-empty-state {
+                background: #ffffff;
+            }
+        </style>
+    </th:block>
+</head>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Test Run Report</title>
+    <th:block th:replace="~{print/fragments/print-common-styles :: printCommonStyles}"></th:block>
+    <style>
+        .test-set-section {
+            background: #ffffff;
+            border: 1px solid #999999;
+            border-radius: 4px;
+            margin: 10px 0 10px 10px;
+            padding: 10px;
+        }
+
+        .test-set-section h2 {
+            font-size: 16px;
+            margin: 0 0 6px 0;
+        }
+
+        .path-section {
+            margin: 8px 0 8px 10px;
+            padding: 10px;
+            border-left-width: 3px;
+        }
+
+        .path-section h3 {
+            font-size: 15px;
+            margin: 0 0 6px 0;
+        }
+    </style>
+</head>
+<body>
+<main class="report">
+    <section class="header">
+        <h1>Test Run Result</h1>
+        <div class="header-meta">
+            <div class="header-meta-item">
+                <span class="header-meta-label">Test Run ID</span>
+                <span class="header-meta-value" th:text="${context.id}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Application ID</span>
+                <span class="header-meta-value" th:text="${context.applicationId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Stage ID</span>
+                <span class="header-meta-value" th:text="${context.stageId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Test Plan ID</span>
+                <span class="header-meta-value" th:text="${context.testPlanId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Timestamp</span>
+                <span class="header-meta-value" th:text="${context.timestamp} ?: 'n/a'">n/a</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Status</span>
+                <span class="header-meta-value" th:text="${context.status}">UNKNOWN</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Label</span>
+                <span class="header-meta-value" th:text="${context.label} ?: 'n/a'">n/a</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Attached Test Set Results</span>
+                <span class="header-meta-value" th:text="${#lists.size(context.testSetPrintContexts)}">0</span>
+            </div>
+        </div>
+    </section>
+
+    <th:block th:if="${#lists.isEmpty(context.testSetPrintContexts)}">
+        <section class="print-empty-state" style="padding:16px;">
+            No test set results available.
+        </section>
+    </th:block>
+
+    <th:block th:each="testSetResult : ${context.testSetPrintContexts}">
+        <section class="test-set-section">
+            <h2>Test Set Result</h2>
+            <div class="header-meta">
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Test Set ID</span>
+                    <span class="header-meta-value" th:text="${testSetResult.id}">0</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Executed In Browser</span>
+                    <span class="header-meta-value" th:text="${testSetResult.browser}">UNKNOWN</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Path Results</span>
+                    <span class="header-meta-value" th:text="${#lists.size(testSetResult.pathPrintContexts)}">0</span>
+                </div>
+            </div>
+
+            <th:block th:if="${#lists.isEmpty(testSetResult.pathPrintContexts)}">
+                <section class="print-empty-state" style="padding:16px; margin-top:8px;">
+                    No test path results available.
+                </section>
+            </th:block>
+
+            <th:block th:each="pathResult : ${testSetResult.pathPrintContexts}">
+                <section class="path-section">
+                    <h3>Test Path Result</h3>
+                    <div class="header-meta">
+                        <div class="header-meta-item">
+                            <span class="header-meta-label">Path Result database ID</span>
+                            <span class="header-meta-value" th:text="${pathResult.pathResultId}">0</span>
+                        </div>
+                        <div class="header-meta-item">
+                            <span class="header-meta-label">Parent Test Set Result ID</span>
+                            <span class="header-meta-value" th:text="${pathResult.testSetResultId}">0</span>
+                        </div>
+                        <div class="header-meta-item">
+                            <span class="header-meta-label">Path Label</span>
+                            <span class="header-meta-value" th:text="${pathResult.pathLabel} ?: 'n/a'">n/a</span>
+                        </div>
+                        <div class="header-meta-item">
+                            <span class="header-meta-label">Executed In Browser</span>
+                            <span class="header-meta-value" th:text="${pathResult.browser}">UNKNOWN</span>
+                        </div>
+                        <div class="header-meta-item">
+                            <span class="header-meta-label">Actions in Path</span>
+                            <span class="header-meta-value" th:text="${#lists.size(pathResult.actionResults)}">0</span>
+                        </div>
+                    </div>
+
+                    <th:block th:if="${#lists.isEmpty(pathResult.actionResults)}">
+                        <section class="print-empty-state" style="padding:16px; margin-top:8px;">
+                            No action results available.
+                        </section>
+                    </th:block>
+
+                    <th:block th:if="${not #lists.isEmpty(pathResult.actionResults)}">
+                        <th:block th:each="actionResult : ${pathResult.actionResults}">
+                            <th:block th:replace="~{print/fragments/action-result :: actionResultCard(${actionResult})}"></th:block>
+                        </th:block>
+                    </th:block>
+                </section>
+            </th:block>
+        </section>
+    </th:block>
+</main>
+</body>
+</html>

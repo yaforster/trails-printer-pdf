@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<article class="action-card" style="margin-bottom:8px; padding:8px;"
+         th:classappend="${actionResult.resultType != null and actionResult.resultType.name() == 'SUCCESS'} ? ' result-success' :
+                       (${actionResult.resultType != null and actionResult.resultType.name() == 'SKIPPED'} ? ' result-skipped' : ' result-failure')"
+         th:fragment="actionResultCard(actionResult)">
+    <div class="action-grid">
+        <div class="action-field">
+            <span class="action-field-label">Action Result database ID</span>
+            <span class="action-field-value" th:text="${actionResult.id}">0</span>
+        </div>
+        <div class="action-field">
+            <span class="action-field-label">Test Path result database ID</span>
+            <span class="action-field-value" th:text="${actionResult.testPathResultId}">0</span>
+        </div>
+        <div class="action-field">
+            <span class="action-field-label">Action ID</span>
+            <span class="action-field-value" th:text="${actionResult.actionId}">0</span>
+        </div>
+        <div class="action-field">
+            <span class="action-field-label">Result Type</span>
+            <span class="action-field-value" th:text="${actionResult.resultType}">UNKNOWN</span>
+        </div>
+        <div class="action-field">
+            <span class="action-field-label">Action label</span>
+            <span class="action-field-value" th:text="${actionResult.label}">n/a</span>
+        </div>
+        <div class="action-field">
+            <span class="action-field-label">Message</span>
+            <span class="action-field-value" th:text="${actionResult.message}">n/a</span>
+        </div>
+        <div class="action-field">
+            <span class="action-field-label">Exception Message</span>
+            <span class="action-field-value" th:text="${actionResult.exceptionMessageFromAction} ?: '-'">-</span>
+        </div>
+    </div>
+    <th:block
+            th:with="actionScreenshotDataUri=${screenshotsByActionResultId[actionResult.id]}">
+        <div class="action-screenshot-wrap" th:if="${actionScreenshotDataUri != null}">
+            <img alt="Action screenshot" class="action-screenshot" th:src="${actionScreenshotDataUri}"/>
+        </div>
+    </th:block>
+</article>
+</body>
+</html>

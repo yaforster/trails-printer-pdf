@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Test Set Report</title>
+    <th:block th:replace="~{print/fragments/print-common-styles :: printCommonStyles}"></th:block>
+    <style>
+        .path-section {
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .path-section h2 {
+            margin: 0 0 6px 0;
+        }
+    </style>
+</head>
+<body>
+<main class="report">
+    <section class="header">
+        <h1>Test Set Result</h1>
+        <div class="header-meta">
+            <div class="header-meta-item">
+                <span class="header-meta-label">Database ID (PersistedTestSetResult)</span>
+                <span class="header-meta-value" th:text="${context.id}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Test Run Result ID</span>
+                <span class="header-meta-value" th:text="${context.testRunId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Application ID</span>
+                <span class="header-meta-value" th:text="${context.applicationId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Stage ID</span>
+                <span class="header-meta-value" th:text="${context.stageId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Executed In Browser</span>
+                <span class="header-meta-value" th:text="${context.browser}">UNKNOWN</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Attached Test Paths</span>
+                <span class="header-meta-value" th:text="${#lists.size(context.pathPrintContexts)}">0</span>
+            </div>
+        </div>
+    </section>
+
+    <th:block th:if="${#lists.isEmpty(context.pathPrintContexts)}">
+        <section class="print-empty-state" style="padding:16px;">
+            No test path results available.
+        </section>
+    </th:block>
+
+    <th:block th:each="pathResult : ${context.pathPrintContexts}">
+        <section class="path-section">
+            <h2>Test Path Result</h2>
+            <div class="header-meta">
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Path Result database ID</span>
+                    <span class="header-meta-value" th:text="${pathResult.pathResultId}">0</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Parent Test Set Result ID</span>
+                    <span class="header-meta-value" th:text="${pathResult.testSetResultId}">0</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Path Label</span>
+                    <span class="header-meta-value" th:text="${pathResult.pathLabel} ?: 'n/a'">n/a</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Executed In Browser</span>
+                    <span class="header-meta-value" th:text="${pathResult.browser}">UNKNOWN</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="header-meta-label">Actions in Path</span>
+                    <span class="header-meta-value" th:text="${#lists.size(pathResult.actionResults)}">0</span>
+                </div>
+            </div>
+
+            <th:block th:if="${#lists.isEmpty(pathResult.actionResults)}">
+                <section class="print-empty-state" style="padding:16px; margin-top:8px;">
+                    No action results available.
+                </section>
+            </th:block>
+
+            <th:block th:if="${not #lists.isEmpty(pathResult.actionResults)}">
+                <th:block th:each="actionResult : ${pathResult.actionResults}">
+                    <th:block th:replace="~{print/fragments/action-result :: actionResultCard(${actionResult})}"></th:block>
+                </th:block>
+            </th:block>
+        </section>
+    </th:block>
+</main>
+</body>
+</html>

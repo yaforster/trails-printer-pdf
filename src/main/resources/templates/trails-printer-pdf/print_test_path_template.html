@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Test Path Report</title>
+    <th:block th:replace="~{print/fragments/print-common-styles :: printCommonStyles}"></th:block>
+</head>
+<body>
+<main class="report">
+    <section class="header">
+        <h1>Test Path Result</h1>
+        <div class="header-meta">
+            <div class="header-meta-item">
+                <span class="header-meta-label">Database ID (PersistedTestPathResult)</span>
+                <span class="header-meta-value" th:text="${context.pathResultId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">TestSet Result ID</span>
+                <span class="header-meta-value" th:text="${context.testSetResultId}">0</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Executed In browser:</span>
+                <span class="header-meta-value" th:text="${context.browser}">UNKNOWN</span>
+            </div>
+            <div class="header-meta-item">
+                <span class="header-meta-label">Actions in Path</span>
+                <span class="header-meta-value" th:text="${#lists.size(context.actionResults)}">0</span>
+            </div>
+        </div>
+    </section>
+
+    <th:block th:if="${#lists.isEmpty(context.actionResults)}">
+        <section class="print-empty-state" style="padding:16px;">
+            No action results available.
+        </section>
+    </th:block>
+
+    <th:block th:each="actionResult : ${context.actionResults}">
+        <th:block th:replace="~{print/fragments/action-result :: actionResultCard(${actionResult})}"></th:block>
+    </th:block>
+</main>
+</body>
+</html>
