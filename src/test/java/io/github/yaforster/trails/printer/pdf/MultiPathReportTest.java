@@ -104,6 +104,7 @@ class MultiPathReportTest {
     }
 
     enum Report {
-        BROWSER, RUN
+        BROWSER,
+        RUN
     }
 }

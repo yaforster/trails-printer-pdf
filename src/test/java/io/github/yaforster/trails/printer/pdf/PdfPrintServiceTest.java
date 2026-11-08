@@ -114,6 +114,8 @@ class PdfPrintServiceTest {
     }
 
     enum Report {
-        PATH, BROWSER, RUN
+        PATH,
+        BROWSER,
+        RUN
     }
 }
